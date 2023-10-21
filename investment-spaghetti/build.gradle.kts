@@ -1,5 +1,7 @@
 plugins {
     id("java")
+    id("org.springframework.boot") version "3.1.5"
+    id("io.spring.dependency-management") version "1.1.3"
 }
 
 group = "io.bestbankever"
@@ -10,8 +12,8 @@ repositories {
 }
 
 dependencies {
-    testImplementation(platform("org.junit:junit-bom:5.9.1"))
-    testImplementation("org.junit.jupiter:junit-jupiter")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.test {
