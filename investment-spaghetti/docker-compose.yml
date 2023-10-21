@@ -1,0 +1,26 @@
+services:
+  api:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      AWESOMETAX_URL: http://awesometax:8081
+      DB_HOST: db
+      SMTP_HOST: maildev
+  awesometax:
+    build: ../awesometax
+    ports:
+      - "8081:8081"
+  db:
+    build: ../db
+    ports:
+      - "5432:5432"
+  adminer:
+    image: adminer
+    ports:
+      - "8082:8080"
+  maildev:
+    image: maildev/maildev
+    ports:
+      - "1080:1080"
+      - "1025:1025"
