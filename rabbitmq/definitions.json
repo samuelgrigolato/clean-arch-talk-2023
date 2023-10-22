@@ -51,6 +51,13 @@
             "durable": true,
             "auto_delete": false,
             "arguments": {}
+        },
+        {
+            "name": "investor.all-investments-redemption-requested.clean",
+            "vhost": "/",
+            "durable": true,
+            "auto_delete": false,
+            "arguments": {}
         }
     ],
     "exchanges": [
@@ -86,6 +93,14 @@
             "source": "investor.all-investments-redemption-requested",
             "vhost": "/",
             "destination": "investor.all-investments-redemption-requested.spaghetti",
+            "destination_type": "queue",
+            "routing_key": "",
+            "arguments": {}
+        },
+        {
+            "source": "investor.all-investments-redemption-requested",
+            "vhost": "/",
+            "destination": "investor.all-investments-redemption-requested.clean",
             "destination_type": "queue",
             "routing_key": "",
             "arguments": {}
