@@ -2,6 +2,6 @@ package io.bestbankever.domain;
 
 import java.time.LocalDate;
 
-interface TodayProvider {
+public interface TodayProvider {
     LocalDate today();
 }

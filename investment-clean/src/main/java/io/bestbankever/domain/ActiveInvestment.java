@@ -3,10 +3,11 @@ package io.bestbankever.domain;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.SortedSet;
+import java.util.UUID;
 
-class ActiveInvestment extends Investment {
+public class ActiveInvestment extends Investment {
 
-    RedeemedInvestment redeem(FindMonthlyInterestRatesByPeriodFunction ratesByPeriodFinder,
+    public RedeemedInvestment redeem(FindMonthlyInterestRatesByPeriodFunction ratesByPeriodFinder,
                               TodayProvider todayProvider) {
         LocalDate investmentDate = getInvestmentDate();
         BigDecimal amount = getAmount();
@@ -19,10 +20,10 @@ class ActiveInvestment extends Investment {
         for (MonthlyInterestRate monthlyRate : monthlyRates) {
             redeemedAmount = redeemedAmount.multiply(BigDecimal.ONE.add(monthlyRate.rate()));
         }
-        return new RedeemedInvestment(investmentDate, amount, redeemedAmount, today);
+        return new RedeemedInvestment(investmentDate, amount, redeemedAmount, getInvestorId(), today);
     }
 
-    ActiveInvestment(LocalDate investmentDate, BigDecimal amount) {
-        super(investmentDate, amount);
+    ActiveInvestment(LocalDate investmentDate, BigDecimal amount, UUID investorId) {
+        super(investmentDate, amount, investorId);
     }
 }

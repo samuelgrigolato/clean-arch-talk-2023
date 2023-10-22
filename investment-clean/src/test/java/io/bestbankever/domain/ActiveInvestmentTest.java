@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -35,7 +36,8 @@ class ActiveInvestmentTest {
 
         LocalDate investmentDate = LocalDate.of(2023, 4, 20);
         BigDecimal amount = new BigDecimal("10.12");
-        ActiveInvestment subject = new ActiveInvestment(investmentDate, amount);
+        UUID investorId = UUID.randomUUID();
+        ActiveInvestment subject = new ActiveInvestment(investmentDate, amount, investorId);
         RedeemedInvestment redeemedInvestment = subject.redeem(ratesByPeriodFunctionMock, todayProviderMock);
 
         BigDecimal expectedRedeemedAmount = new BigDecimal("10.425624");
