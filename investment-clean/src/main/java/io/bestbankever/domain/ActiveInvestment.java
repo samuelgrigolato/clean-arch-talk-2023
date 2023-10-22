@@ -20,10 +20,10 @@ public class ActiveInvestment extends Investment {
         for (MonthlyInterestRate monthlyRate : monthlyRates) {
             redeemedAmount = redeemedAmount.multiply(BigDecimal.ONE.add(monthlyRate.rate()));
         }
-        return new RedeemedInvestment(investmentDate, amount, redeemedAmount, getInvestorId(), today);
+        return new RedeemedInvestment(getId(), investmentDate, amount, redeemedAmount, getInvestorId(), today);
     }
 
-    ActiveInvestment(LocalDate investmentDate, BigDecimal amount, UUID investorId) {
-        super(investmentDate, amount, investorId);
+    public ActiveInvestment(UUID id, LocalDate investmentDate, BigDecimal amount, UUID investorId) {
+        super(id, investmentDate, amount, investorId);
     }
 }

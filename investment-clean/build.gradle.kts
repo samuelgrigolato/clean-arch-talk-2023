@@ -12,7 +12,12 @@ repositories {
 }
 
 dependencies {
+    implementation("org.eclipse.angus:angus-mail:2.0.2")
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+    implementation("org.springframework.boot:spring-boot-starter-web")
+    implementation("com.fasterxml.jackson.core:jackson-databind")
+    runtimeOnly("org.postgresql:postgresql")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 

@@ -33,7 +33,7 @@ class RedeemInvestmentUseCaseTest {
 
         String emailAddress = "expected@address.com";
         Investor investorMock = Mockito.mock(Investor.class);
-        when(investorMock.getEmailAddress()).thenReturn(emailAddress);
+        when(investorMock.getEmail()).thenReturn(emailAddress);
         when(investorRepositoryMock.getById(investorUuid)).thenReturn(investorMock);
 
         EmailMessage emailMessage = new EmailMessage("subject", "<p>content</p>");

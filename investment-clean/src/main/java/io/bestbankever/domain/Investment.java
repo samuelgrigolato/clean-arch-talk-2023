@@ -5,21 +5,27 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 class Investment {
+    private UUID id;
     private LocalDate investmentDate;
     private BigDecimal amount;
     private UUID investorId;
 
-    Investment(LocalDate investmentDate, BigDecimal amount, UUID investorId) {
+    Investment(UUID id, LocalDate investmentDate, BigDecimal amount, UUID investorId) {
+        this.id = id;
         this.investmentDate = investmentDate;
         this.amount = amount;
         this.investorId = investorId;
     }
 
-    protected LocalDate getInvestmentDate() {
+    public UUID getId() {
+        return id;
+    }
+
+    public LocalDate getInvestmentDate() {
         return investmentDate;
     }
 
-    protected BigDecimal getAmount() {
+    public BigDecimal getAmount() {
         return amount;
     }
 

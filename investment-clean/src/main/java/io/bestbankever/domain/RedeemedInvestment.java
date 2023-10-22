@@ -9,17 +9,17 @@ public class RedeemedInvestment extends Investment {
     private final BigDecimal redeemedAmount;
     private final LocalDate redemptionDate;
 
-    RedeemedInvestment(LocalDate investmentDate, BigDecimal amount, BigDecimal redeemedAmount, UUID investorId, LocalDate redemptionDate) {
-        super(investmentDate, amount, investorId);
+    RedeemedInvestment(UUID id, LocalDate investmentDate, BigDecimal amount, BigDecimal redeemedAmount, UUID investorId, LocalDate redemptionDate) {
+        super(id, investmentDate, amount, investorId);
         this.redeemedAmount = redeemedAmount;
         this.redemptionDate = redemptionDate;
     }
 
-    BigDecimal getRedeemedAmount() {
+    public BigDecimal getRedeemedAmount() {
         return redeemedAmount;
     }
 
-    LocalDate getRedemptionDate() {
+    public LocalDate getRedemptionDate() {
         return redemptionDate;
     }
 }

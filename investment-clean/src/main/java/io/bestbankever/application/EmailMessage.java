@@ -1,4 +1,4 @@
 package io.bestbankever.application;
 
-record EmailMessage(String subject, String htmlContent) {
+public record EmailMessage(String subject, String htmlContent) {
 }

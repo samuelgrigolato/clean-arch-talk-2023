@@ -34,10 +34,11 @@ class ActiveInvestmentTest {
         TodayProvider todayProviderMock = Mockito.mock(TodayProvider.class);
         when(todayProviderMock.today()).thenReturn(today);
 
+        UUID investmentId = UUID.randomUUID();
         LocalDate investmentDate = LocalDate.of(2023, 4, 20);
         BigDecimal amount = new BigDecimal("10.12");
         UUID investorId = UUID.randomUUID();
-        ActiveInvestment subject = new ActiveInvestment(investmentDate, amount, investorId);
+        ActiveInvestment subject = new ActiveInvestment(investmentId, investmentDate, amount, investorId);
         RedeemedInvestment redeemedInvestment = subject.redeem(ratesByPeriodFunctionMock, todayProviderMock);
 
         BigDecimal expectedRedeemedAmount = new BigDecimal("10.425624");

@@ -1,5 +1,5 @@
 package io.bestbankever.application;
 
-interface EmailSender {
+public interface EmailSender {
     void sendEmail(EmailMessage message, String toAddress);
 }
