@@ -9,7 +9,9 @@ import io.bestbankever.jpa.JpaInvestorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Component
 class DefaultInvestmentRepository implements InvestmentRepository {
@@ -28,10 +30,7 @@ class DefaultInvestmentRepository implements InvestmentRepository {
         if (jpaInvestment.getRedemptionDate() != null) {
             throw new IllegalStateException("Not active.");
         }
-        return new ActiveInvestment(jpaInvestment.getId(),
-                jpaInvestment.getInvestmentDate(),
-                jpaInvestment.getAmount(),
-                jpaInvestment.getInvestor().getId());
+        return toActiveInvestment(jpaInvestment);
     }
 
     @Override
@@ -45,5 +44,20 @@ class DefaultInvestmentRepository implements InvestmentRepository {
         jpaInvestment.setRedeemedAmount(redeemedInvestment.getRedeemedAmount());
         jpaInvestment.setRedemptionDate(redeemedInvestment.getRedemptionDate());
         this.jpaInvestmentRepository.save(jpaInvestment);
+    }
+
+    @Override
+    public Set<ActiveInvestment> getAllActiveByInvestor(UUID investorId) {
+        return this.jpaInvestmentRepository
+                .findAllWhereRedemptionDateIsNullAndByInvestorId(investorId)
+                .stream().map(DefaultInvestmentRepository::toActiveInvestment)
+                .collect(Collectors.toSet());
+    }
+
+    private static ActiveInvestment toActiveInvestment(JpaInvestment jpaInvestment) {
+        return new ActiveInvestment(jpaInvestment.getId(),
+                jpaInvestment.getInvestmentDate(),
+                jpaInvestment.getAmount(),
+                jpaInvestment.getInvestor().getId());
     }
 }
