@@ -7,6 +7,11 @@ services:
       AWESOMETAX_URL: http://awesometax:8081
       DB_HOST: db
       SMTP_HOST: maildev
+    depends_on:
+      - db
+      - awesometax
+      - maildev
+      - rabbitmq
   awesometax:
     build: ../awesometax
     ports:
@@ -24,3 +29,8 @@ services:
     ports:
       - "1080:1080"
       - "1025:1025"
+  rabbitmq:
+    build: ../rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
