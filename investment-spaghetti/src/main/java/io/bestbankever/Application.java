@@ -24,6 +24,7 @@ public class Application {
         container.setConnectionFactory(connectionFactory);
         container.setQueueNames("investor.all-investments-redemption-requested.spaghetti");
         container.setMessageListener(listenerAdapter);
+        container.setDefaultRequeueRejected(false);
         return container;
     }
 

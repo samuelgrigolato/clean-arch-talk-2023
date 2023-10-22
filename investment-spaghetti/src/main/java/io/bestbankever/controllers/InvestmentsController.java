@@ -3,8 +3,7 @@ package io.bestbankever.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.bestbankever.entities.Investment;
 import io.bestbankever.repositories.InvestmentJpaRepository;
-import io.bestbankever.vos.MonthYear;
-import io.bestbankever.vos.MonthlyInterestRate;
+import io.bestbankever.services.RedeemInvestmentService;
 import jakarta.mail.*;
 import jakarta.mail.internet.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,12 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
-import java.time.LocalDate;
 import java.util.*;
 
 @RestController
@@ -28,6 +22,9 @@ class InvestmentsController {
 
     @Autowired
     private InvestmentJpaRepository investmentJpaRepository;
+
+    @Autowired
+    private RedeemInvestmentService redeemInvestmentService;
 
     @PostMapping("/{uuid}/redeem")
     ResponseEntity<?> redeem(@PathVariable UUID uuid) throws URISyntaxException, IOException, InterruptedException, MessagingException {
@@ -44,34 +41,7 @@ class InvestmentsController {
             return ResponseEntity.badRequest().body("Already redeemed");
         }
 
-        String awesomeTaxUrl = System.getenv("AWESOMETAX_URL");
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .GET()
-                .uri(new URI(awesomeTaxUrl + "/interest-rates.json"))
-                .build();
-        HttpClient httpClient = HttpClient.newBuilder()
-                .build();
-        String response = httpClient
-                .send(httpRequest, HttpResponse.BodyHandlers.ofString())
-                .body();
-        ObjectMapper mapper = new ObjectMapper();
-        MonthlyInterestRate[] rates = mapper.readValue(response, MonthlyInterestRate[].class);
-
-        LocalDate redemptionDate = LocalDate.now();
-        BigDecimal redeemedAmount = investment.getAmount();
-        List<BigDecimal> sortedRates = Arrays.stream(rates)
-                .filter(x -> x.monthYear().compareTo(MonthYear.from(investment.getInvestmentDate())) >= 0)
-                .filter(x -> x.monthYear().compareTo(MonthYear.from(redemptionDate)) < 0)
-                .sorted(Comparator.comparing(MonthlyInterestRate::monthYear))
-                .map(MonthlyInterestRate::rate)
-                .toList();
-        for (BigDecimal rate : sortedRates) {
-            redeemedAmount = redeemedAmount.multiply(BigDecimal.ONE.add(rate));
-        }
-        investment.setRedeemedAmount(redeemedAmount);
-        investment.setRedemptionDate(redemptionDate);
-
-        this.investmentJpaRepository.save(investment);
+        BigDecimal redeemedAmount = redeemInvestmentService.redeem(investment);
 
         String emailHtml = """
         <h1>Your investment has been redeemed successfully!</h1>
@@ -98,6 +68,7 @@ class InvestmentsController {
         message.setContent(multipart);
         Transport.send(message);
 
+        ObjectMapper mapper = new ObjectMapper();
         Map<String, BigDecimal> responseMap = new HashMap<>();
         responseMap.put("redeemedAmount", redeemedAmount);
         return ResponseEntity.ok()

@@ -48,4 +48,8 @@ public class Investment {
     public Investor getInvestor() {
         return investor;
     }
+
+    public void setInvestor(Investor investor) {
+        this.investor = investor;
+    }
 }
